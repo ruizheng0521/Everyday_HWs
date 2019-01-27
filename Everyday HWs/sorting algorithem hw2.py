@@ -1,9 +1,9 @@
-from random import randrange
+from random import *
 
 def which_algor(select, size, lst,start = None, end = None):
   if len(lst) != size:
     return "list size do not match"
-  elif select == 0:
+  if select == 0:
     return bubble_sort(lst)
   elif select == 1:
     return insertion_sort(lst)
@@ -12,10 +12,10 @@ def which_algor(select, size, lst,start = None, end = None):
   elif select == 3:
     return merge_sort(lst)
   elif select == 4:
-    quicksort_extra(lst,start,end)
+    quicksort_inplace(lst,start,end)
     return lst
   elif select ==5:
-    quicksort_in_place(lst,start,end)
+    quicksort_extra(lst)
     return lst
   else:
     return "Invalid"
@@ -83,32 +83,28 @@ def quicksort_inplace(lst,start,end):
      return None
   pivot_index = randrange(start,end+1)
   new_pivot = partition(lst, start, end, pivot_index)
-  quicksort_extra(lst,start,new_pivot-1)
-  quicksort_extra(lst,new_pivot+1,end)
+  quicksort_inplace(lst,start,new_pivot-1)
+  quicksort_inplace(lst,new_pivot+1,end)
   
-def extra_partition(lst,start,end):
-    pivot = lst[(start + end) //2]
-    clone = []
-    pivot, lst[start] = lst[start], pivot
-    front = 0 
-    back = end - start
-    for i in range(start+1, end+1):
-      if lst[i] < pivot:
-        clone.append(lst[i])
-        front +=1 
+def quicksort_extra(lst):
+  if len(lst) <= 1:
+      return lst
+  k = lst[0]
+  array_a, array_b = [], []
+  for i in range(1, len(lst)):
+      if lst[i] >= k:
+          array_b.append(lst[i])
       else:
-        clone.append(lst[i])
-        back -=1
-    clone[front] = pivot
-    for i in range(start, end +1):
-      lst[i] = clone[i-start]
-    return start + front
+          array_a.append(lst[i])
+  return quicksort_extra(array_a)+ [k] + quicksort_extra(array_b)
 
-def quicksort_in_place(lst,start,end):
+test = []
+for i in range(120):
+  test.append(randint(1,100))
+sorts =sorted(test)
 
-  if end <= start:
-     return None
-  pivot = extra_partition(lst, start, end)
-  quicksort_in_place(lst,start,pivot-1)
-  quicksort_in_place(lst,pivot+1,end)
+for k in range(6):
+  key = test
+  print(which_algor(k, 100, key,0,len(key)-1))
+  print(sorts == key)
 
